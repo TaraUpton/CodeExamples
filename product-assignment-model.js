@@ -1,0 +1,25 @@
+import { adminData } from "~/admin/data";
+// Model
+export const PROPS_ACTIVE_INACTIVE = adminData.PROPS_ACTIVE_INACTIVE;
+export const PROPS_ACTIVE_YN = adminData.PROPS_ACTIVE_YN;
+export const PROPS_CAN_DELETE = adminData.PROPS_CAN_DELETE;
+export const PROPS_CROP_CLASS_NAME = "cropClassName";
+export const PROPS_CROP_LIST = "cropList";
+export const PROPS_CROP_NAME = "cropName";
+export const PROPS_CROP_PURPOSE_NAME = "cropPurposeName";
+export const PROPS_ERROR_MESSAGE = "errorMessage";
+export const PROPS_GROWTH_STAGE_ORDER = "growthStageOrder";
+export const PROPS_GROWTH_STAGE_ORDER_NAME = "growthStageOrderName";
+export const PROPS_IMPORT_EXPORT = adminData.PROPS_IMPORT_EXPORT;
+export const PROPS_IS_ACTIVE = adminData.PROPS_IS_ACTIVE;
+export const PROPS_NUTRIENT_GUID = "nutrientGuid";
+export const PROPS_NUTRIENT_NAME = "nutrientName";
+export const PROPS_ORG_LEVEL = "orgLevel";
+export const PROPS_ORG_LEVEL_LIST = "orgLevelList";
+export const PROPS_ORG_LEVEL_NAME = "orgLevelName";
+export const PROPS_ORG_LEVEL_GUID = "orgLevelGuid";
+export const PROPS_PRODUCT_LIST = "productList";
+export const PROPS_PRODUCT_NAME = "productName";
+export const PROPS_PRODUCT_ASSIGNMENT_GUID = "productAssignmentGuid";
+export const PROPS_SAMPLE_TYPE_GUID = "sampleTypeGuid";
+export const PROPS_SAMPLE_TYPE_NAME = "sampleTypeName";

@@ -1,0 +1,227 @@
+Imports System.Web.Http
+Imports HaasCore.Models
+Imports Newtonsoft.Json.Linq
+Imports HaasWebApp.Models.EntityHierarchy
+Imports HaasWebApp.ViewModels.EntityHierarchy
+
+Namespace Controllers.WebApiControllers
+
+    <Authorize>
+    Public Class ProductAssignmentController
+        Inherits ApiController
+
+        ''' <summary>
+        ''' Add a new Product Assignment from the Add/Edit page.
+        ''' </summary>
+        ''' <param name="objJson">object of Product Assignment with a LoggedInUserGuid</param>
+        ''' <returns>Boolean indicating success or failure</returns>
+        ''' <remarks></remarks>
+        <HttpPost()>
+        Public Function AddProductAssignment(ByVal objJson As JObject) As ApiResult
+            Dim result As New ApiResult
+            Dim loggedInUserGuid As String = objJson("UserGuid").ToObject(Of String)()
+            Dim productAssignment As ProductAssignment = objJson("Model").ToObject(Of ProductAssignment)()
+
+            ProductAssignmentVm.AddProductAssignment(loggedInUserGuid, productAssignment, result)
+
+            Return result
+        End Function
+
+        ''' <summary>
+        ''' Delete an existing Product Assignment
+        ''' </summary>
+        ''' <param name="objJson"></param>
+        ''' <returns>Boolean indicating success or failure</returns>
+        ''' <remarks></remarks>
+        <HttpDelete()>
+        Public Function DeleteProductAssignment(ByVal objJson As JObject) As ApiResult
+            Dim result As New ApiResult
+            Dim loggedInUserGuid As String = objJson("UserGuid").ToObject(Of String)()
+            Dim productAssignmentGuid As String = objJson("Model").ToString()
+
+            ProductAssignmentVm.DeleteProductAssignment(productAssignmentGuid, loggedInUserGuid, result)
+
+            Return result
+
+        End Function
+
+        ''' <summary>
+        ''' Delete the ProductAssignments in the list that are not in use.
+        ''' </summary>
+        ''' <param name="objJson">Model = List(Of ProductAssignmentGridRow)</param>
+        ''' <returns>A string denoting the success or failure of the delete.</returns>
+        ''' <remarks></remarks>
+        <HttpDelete()>
+        Public Function DeleteProductAssignmentList(ByVal objJson As JObject) As ApiResult
+            Dim result As New ApiResult
+            Dim loggedInUserGuid As String = objJson("UserGuid").ToObject(Of String)()
+            Dim productAssignmentList As List(Of String) = objJson("Model").ToObject(Of List(Of String))()
+
+            ProductAssignmentVm.DeleteProductAssignmentList(productAssignmentList, loggedInUserGuid, result)
+
+            Return result
+        End Function
+
+        ''' <summary>
+        ''' Validate the ProductAssignment file to be imported, return the number of records to be added and updated
+        ''' </summary>
+        ''' <param name="objJson"></param>
+        ''' <returns> Api result success or error code</returns>
+        ''' <remarks></remarks>
+        <HttpPost>
+        Public Function ValidProductAssignmentImport(ByVal objJson As JObject) As ApiResult
+            Dim result As New ApiResult
+            Dim loggedInUserGuid As String = objJson("UserGuid").ToString
+            Dim base64Text As String = objJson("Model").ToString
+
+            ProductAssignmentVm.ValidProductAssignmentImport(base64Text, loggedInUserGuid, result)
+
+            Return result
+        End Function
+
+        ''' <summary>
+        ''' Import a ProductAssignment file into the database
+        ''' </summary>
+        ''' <param name="objJson"></param>
+        ''' <returns> Api result success or error code</returns>
+        ''' <remarks></remarks>
+        <HttpPost>
+        Public Function ProductAssignmentImport(ByVal objJson As JObject) As ApiResult
+            Dim result As New ApiResult
+            Dim loggedInUserGuid As String = objJson("UserGuid").ToString
+            Dim base64Text As String = objJson("Model").ToString
+
+            ProductAssignmentVm.ProductAssignmentImport(base64Text, loggedInUserGuid, result)
+
+            Return result
+        End Function
+
+        ''' <summary>
+        ''' Export the list of Product Assignments to an S3 bucket
+        ''' </summary>
+        ''' <param name="objJson"></param>
+        ''' <returns> Api result success containing the URL and S3 info or error code on failure</returns>
+        ''' <remarks></remarks>
+        <HttpPost>
+        Public Function ExportProductAssignmentList(ByVal objJson As JObject) As ApiResult
+            Dim result As New ApiResult
+            Dim loggedInUserGuid As String = objJson("UserGuid").ToString
+            Dim model As List(Of String) = objJson("Model").ToObject(Of List(Of String))()
+
+            ProductAssignmentVm.ExportProductAssignmentList(model, loggedInUserGuid, result)
+
+            Return result
+        End Function
+
+        ''' <summary>
+        ''' Returns a list for the autocomplete searches in the grid
+        ''' </summary>
+        ''' <param name="productAssignmentAutoCompleteRequest">object of ProductAssignmentAutoCompleteRequest</param>
+        ''' <returns>ApiResult</returns>
+        ''' <remarks></remarks>
+        <HttpPost()>
+        Public Function GetAutoSearchList(productAssignmentAutoCompleteRequest As JObject) As ApiResult
+            Dim result As New ApiResult
+            Dim req As ProductAssignmentAutoCompleteRequest = productAssignmentAutoCompleteRequest("Model").ToObject(Of ProductAssignmentAutoCompleteRequest)()
+
+            ProductAssignmentVm.GetAutoSearchList(req, req.UserGuid, result)
+
+            Return result
+
+        End Function
+
+        ''' <summary>
+        ''' Fetch Product assignment object for the Add/Edit page
+        ''' </summary>
+        ''' <param name="objJson">
+        '''  - UserGuid -- the identity of the logged in user requesting the fetch
+        '''  - Model -- the product assignment guid populated by the client
+        ''' </param>
+        ''' <returns>
+        '''  Success - Boolean
+        '''  Model - Product Assignment Object 
+        '''  Error Code List
+        ''' </returns>
+        ''' <remarks></remarks>
+        <HttpPost>
+        Public Function GetProductAssignment(ByVal objJson As JObject) As ApiResult
+            Dim result As New ApiResult
+            Dim loggedInUserGuid As String = objJson("UserGuid").ToObject(Of String)()
+            Dim productAssignmentGuid As String = objJson("Model").ToObject(Of String)()
+
+            ProductAssignmentVm.GetProductAssignment(productAssignmentGuid, loggedInUserGuid, result)
+
+            Return result
+
+        End Function
+
+        ''' <summary>
+        ''' To get a list of Product Assignments for the grid.
+        ''' </summary>
+        ''' <param name="objJson">Model=ProductAssignmentRequest object</param>
+        ''' <returns>
+        ''' ApiResult.Model=GridPageResponse with list of ProductAssignmentGridRows in the GridRows Property)
+        ''' </returns>
+        ''' ErrorCodes: SortNameInvalid
+        ''' <remarks></remarks>
+        <HttpPost>
+        Public Function GetProductAssignmentList(ByVal objJson As JObject) As ApiResult
+            Dim result As New ApiResult
+            Dim loggedInUserGuid As String = objJson("UserGuid").ToObject(Of String)()
+            Dim request As ProductAssignmentRequest = objJson("Model").ToObject(Of ProductAssignmentRequest)()
+
+            ProductAssignmentVm.GetProductAssignmentList(request, loggedInUserGuid, result)
+
+            Return result
+
+        End Function
+
+        ''' <summary>
+        ''' fetch a list of Selected Product Assignments
+        ''' </summary>
+        ''' <param name="objJson">
+        '''  - UserGuid -- the identity of the logged in user requesting the fetch
+        '''  - Model -- the product assignment request object populated by the client
+        ''' </param>
+        ''' <returns>
+        '''  Success - Boolean
+        '''  Model - Product Assignment List 
+        '''  Error Code List
+        ''' </returns>
+        ''' <remarks></remarks>
+        <HttpPost>
+        Public Function GetProductAssignmentSelectAllList(ByVal objJson As JObject) As ApiResult
+            Dim result As New ApiResult
+            Dim loggedInUserGuid As String = objJson("UserGuid").ToString
+            Dim productAssignmentRequest As ProductAssignmentRequest = objJson("Model").ToObject(Of ProductAssignmentRequest)()
+
+            ProductAssignmentVm.GetProductAssignmentSelectAllList(productAssignmentRequest, loggedInUserGuid, result)
+
+            Return result
+        End Function
+
+        ''' <summary>
+        ''' Update an entire Product assignment from the add/edit page
+        ''' </summary>
+        ''' <param name="objJson">
+        '''  - UserGuid -- the identity of the logged in user performing the update
+        '''  - Model -- the product assignment object populated by the client
+        ''' </param>
+        ''' <returns>
+        '''  Success - Boolean 
+        '''  Error Code List -- 
+        ''' </returns>
+        ''' <remarks></remarks>
+        <HttpPost>
+        Function UpdateProductAssignment(objJson As JObject) As ApiResult
+            Dim result As New ApiResult()
+            Dim loggedInUserGuid As String = objJson("UserGuid").ToString()
+            Dim productAssignment As ProductAssignment = objJson("Model").ToObject(Of ProductAssignment)()
+
+            ProductAssignmentVm.UpdateProductAssignment(productAssignment, loggedInUserGuid, result)
+            Return result
+        End Function
+
+    End Class
+End Namespace
+

@@ -1,0 +1,21 @@
+import { adminData } from "~/admin/data";
+// Model
+export const PROPS_ACTIVE_INACTIVE = adminData.PROPS_ACTIVE_INACTIVE;
+export const PROPS_ACTIVE_YN = adminData.PROPS_ACTIVE_YN;
+export const PROPS_CAN_DELETE = adminData.PROPS_CAN_DELETE;
+export const PROPS_ERROR_MESSAGE = "errorMessage";
+export const PROPS_IMPORT_EXPORT = adminData.PROPS_IMPORT_EXPORT;
+export const PROPS_IS_ACTIVE = adminData.PROPS_IS_ACTIVE;
+export const PROPS_NUMBER_OF_CLASSES = "numberOfClasses";
+export const PROPS_CLASSIFICATION_METHOD_GUID = "classificationMethodGuid";
+export const PROPS_CLASSIFICATION_METHOD_NAME = "classificationMethodName";
+export const PROPS_COLOR_RAMP_GUID = "colorRampGuid";
+export const PROPS_COLOR_RAMP_NAME = "colorRampName";
+export const PROPS_ORG_LEVEL = "orgLevel";
+export const PROPS_ORG_LEVEL_GUID = "orgLevelGuid";
+export const PROPS_ORG_LEVEL_LIST = "orgLevelList";
+export const PROPS_ORG_LEVEL_NAME = "orgLevelName";
+export const PROPS_SURFACE_DEFAULTS_GUID = "surfaceDefaultsGuid";
+export const PROPS_SURFACE_DEFAULTS_NAME = "surfaceDefaultsName";
+export const PROPS_SYSTEM_ATTRIBUTE_GUID = "systemAttributeGuid";
+export const PROPS_SYSTEM_ATTRIBUTE_NAME = "systemAttributeName";
